@@ -3,44 +3,49 @@ class CamaraNhScrapper
 
   def initialize
     @mechanized = Mechanize.new
-    @page = @mechanized.get(URL)
-    @html = Nokogiri::HTML(page.body)
   end
 
-  def self.scrap
-    new.scrap
+  def self.do_scraping
+    new.paginated_scrap
   end
 
   def paginated_scrap
     result = []
 
     loop do
-      result.push scrap
+      load_page
 
-      break unless has_more_pages
+      result.push current_page_content
+
+      break if no_more_pages?
     end
-
-    binding.pry
 
     result.flatten
   end
 
-  def has_more_pages
-    a = html.css('.pagination')
-    b = a.xpath('./li')
-    c = b.last.xpath('./a')
-    link = mechanized.resolve(c.first["href"])
+  private
 
-    # TODO: finalize pagination
+  attr_reader :page, :html, :mechanized, :current_uri
 
-    return if b.last.classes.include? "disabled"
-
-    @page = mechanized.get(link.to_s)
-
-    true
+  def load_page
+    @page = @mechanized.get(current_uri || URL)
+    @html = Nokogiri::HTML(page.body)
   end
 
-  def scrap
+  def no_more_pages?
+    last_li_element = pagination.last
+    li_a_child = last_li_element.xpath('./a')
+
+    @current_uri = mechanized.resolve(li_a_child.first["href"])
+
+    last_li_element.classes.include? "disabled"
+  end
+
+  def pagination
+    html.xpath('//ul[contains(@class, "pagination")]/li')
+  end
+
+  def current_page_content
     html.xpath('//table/tr/td').each_with_object([]) do |entry, result|
       a = entry.xpath('./strong/a').first
       link = mechanized.resolve(a.attributes["href"].value)
@@ -54,9 +59,4 @@ class CamaraNhScrapper
       result.push(subject)
     end
   end
-
-  private
-
-  attr_reader :page, :html, :mechanized
-
 end
