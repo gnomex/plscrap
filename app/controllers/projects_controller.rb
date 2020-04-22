@@ -2,7 +2,8 @@ class ProjectsController < ApplicationController
   def index
     @projects = LawProject.page(page)
 
-    @link = projects_url + next_page_number
+    @next_page = next_page_url
+    @prev_page = prev_page_url
   end
 
   def scrap_data
@@ -13,9 +14,15 @@ class ProjectsController < ApplicationController
 
   private
 
-  def next_page_number
-    page = (@projects.last_page? ? :current_page : :next_page)
+  def next_page_url
+    return if @projects.last_page?
 
-    "?page=#{@projects.send(page)}"
+    projects_url + "?page=#{@projects.next_page}"
+  end
+
+  def prev_page_url
+    return if @projects.first_page?
+
+    projects_url + "?page=#{@projects.prev_page}"
   end
 end
