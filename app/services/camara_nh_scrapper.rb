@@ -51,7 +51,7 @@ class CamaraNhScrapper
       link = mechanized.resolve(a.attributes["href"].value)
 
       subject = {
-        name: a.content,
+        name: a.content.split('-').first.strip,
         link: link.to_s,
         description: entry.xpath('./div[@class="dont-break-out"]').text
       }
