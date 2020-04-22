@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Projetos de lei</h1>
+
+<div>
+  <%= link_to 'Escanear Projetos', scrap_data_path %>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Link</th>
+      <th>Descrição</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @projects.each do |project| %>
+      <tr>
+        <td><%= project.name %></td>
+        <td><%= project.link %></td>
+        <td><%= project.description %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
