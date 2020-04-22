@@ -1,0 +1,14 @@
+version: '3'
+services:
+  postgres_dev:
+    container_name: plscrap-pg
+    image: 'postgres:12'
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: pl-pg_s3cret
+
+volumes:
+  db-data:

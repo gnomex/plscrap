@@ -1,0 +1,15 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: postgres
+  password: pl-pg_s3cret
+  host: 0.0.0.0
+
+development:
+  <<: *default
+  database: plscrap_development
+
+test:
+  <<: *default
+  database: plscrap_test
