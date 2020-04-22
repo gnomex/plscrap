@@ -3,29 +3,28 @@ class CamaraNhScrapper
 
   def initialize
     @mechanized = Mechanize.new
+    @data = ScrapingEntries.new
   end
 
-  def self.do_scraping
-    new.paginated_scrap
+  def self.extract_data
+    new.extract_with_pagination
   end
 
-  def paginated_scrap
-    result = []
-
+  def extract_with_pagination
     loop do
       load_page
 
-      result.push current_page_content
+      get_current_page_content
 
       break if no_more_pages?
     end
 
-    result.flatten
+    data
   end
 
   private
 
-  attr_reader :page, :html, :mechanized, :current_uri
+  attr_reader :page, :html, :mechanized, :current_uri, :data
 
   def load_page
     @page = @mechanized.get(current_uri || URL)
@@ -45,8 +44,8 @@ class CamaraNhScrapper
     html.xpath('//ul[contains(@class, "pagination")]/li')
   end
 
-  def current_page_content
-    html.xpath('//table/tr/td').each_with_object([]) do |entry, result|
+  def get_current_page_content
+    html.xpath('//table/tr/td').each do |entry|
       a = entry.xpath('./strong/a').first
       link = mechanized.resolve(a.attributes["href"].value)
 
@@ -56,7 +55,7 @@ class CamaraNhScrapper
         description: entry.xpath('./div[@class="dont-break-out"]').text
       }
 
-      result.push(subject)
+      data.add(subject)
     end
   end
 end
