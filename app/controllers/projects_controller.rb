@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
   private
 
   def next_page_url
-    return if @projects.last_page?
+    return if @projects.last_page? || @projects.next_page.nil?
 
     projects_url + "?page=#{@projects.next_page}"
   end
