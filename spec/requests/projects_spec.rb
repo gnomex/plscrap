@@ -9,6 +9,7 @@ RSpec.describe "/projects", type: :request do
         {
           total_items: 0,
           page: 1,
+          total_pages: 0,
           items_per_page: 10,
           prev_page: nil,
           next_page: nil,
@@ -36,6 +37,7 @@ RSpec.describe "/projects", type: :request do
         {
           total_items: 3,
           page: 1,
+          total_pages: 1,
           items_per_page: 10,
           prev_page: nil,
           next_page: nil,
@@ -80,6 +82,7 @@ RSpec.describe "/projects", type: :request do
         {
           total_items: 11,
           page: 2,
+          total_pages: 2,
           items_per_page: 10,
           prev_page: "http://localhost:3000/projects?page=1",
           next_page: nil,
