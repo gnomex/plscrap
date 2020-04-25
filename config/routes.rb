@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
-  resources :projects, only: :index
+  namespace :api, defaults: { format: 'json' } do
+    get 'projects', to: 'projects#index'
+    get 'scrap_data', to: 'projects#scrap_data'
+  end
 
-  get 'scrap_data', to: 'projects#scrap_data'
+  get '*page', to: "static#index", constraints: ->(req) do
+    !req.xhr? && req.format.html?
+  end
 
-  root to: "projects#index"
+  root to: "static#index"
 end

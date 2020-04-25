@@ -2,7 +2,7 @@ require 'rails_helper'
 
 Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 
-RSpec.describe "/projects", type: :request do
+RSpec.describe "/api/projects", type: :request do
   describe "GET /index" do
     context 'without data' do
       let(:expected) {
@@ -18,7 +18,7 @@ RSpec.describe "/projects", type: :request do
       }
 
       it "renders a successful response with no data" do
-        get projects_url
+        get api_projects_url
 
         expect(response).to be_successful
         expect(JSON.parse(response.body)).to eq(expected)
@@ -52,7 +52,7 @@ RSpec.describe "/projects", type: :request do
       end
 
       it "renders a successful response with paginated data" do
-        get projects_url
+        get api_projects_url
 
         result = JSON.parse(response.body)
 
@@ -84,7 +84,7 @@ RSpec.describe "/projects", type: :request do
           page: 2,
           total_pages: 2,
           items_per_page: 10,
-          prev_page: "http://localhost:3000/projects?page=1",
+          prev_page: "http://localhost:3000/api/projects?page=1",
           next_page: nil,
           projects: [
             { name: "11", link: "uri", description: "PL 11/00" }
@@ -99,7 +99,7 @@ RSpec.describe "/projects", type: :request do
       end
 
       it "renders a successful response for last paginated data" do
-        get (projects_url + "?page=2")
+        get (api_projects_url + "?page=2")
 
         result = JSON.parse(response.body)
 
