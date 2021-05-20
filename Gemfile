@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'mechanize', '~> 2.7', '>= 2.7.6'
-gem 'nokogiri', '~> 1.10', '>= 1.10.9'
+gem 'nokogiri', '~> 1.11'
 
 gem 'kaminari'
 
